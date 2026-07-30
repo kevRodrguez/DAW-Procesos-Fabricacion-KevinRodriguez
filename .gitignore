@@ -1,0 +1,43 @@
+# Compilación y artefactos generados por .NET
+**/[Bb]in/
+**/[Oo]bj/
+
+# IDEs y configuraciones locales
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Configuración y secretos locales
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.pfx
+*.p12
+*.key
+
+# Bases de datos locales SQLite
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Logs, pruebas y cobertura
+*.log
+TestResults/
+coverage/
+
+# Paquetes generados
+*.nupkg
+*.snupkg
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
