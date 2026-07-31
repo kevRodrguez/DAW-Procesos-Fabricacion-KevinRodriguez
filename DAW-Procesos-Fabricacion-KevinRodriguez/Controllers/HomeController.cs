@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DAW_Procesos_Fabricacion_KevinRodriguez.Data;
 using Microsoft.AspNetCore.Mvc;
 using DAW_Procesos_Fabricacion_KevinRodriguez.Models;
+using DAW_Procesos_Fabricacion_KevinRodriguez.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAW_Procesos_Fabricacion_KevinRodriguez.Controllers;
