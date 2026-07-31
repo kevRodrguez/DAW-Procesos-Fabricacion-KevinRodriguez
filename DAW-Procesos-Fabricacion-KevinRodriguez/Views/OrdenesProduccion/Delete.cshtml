@@ -1,0 +1,23 @@
+@model OrdenProduccion
+@{
+    ViewData["Title"] = "Eliminar orden";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h1 class="h3 text-danger">¿Eliminar orden?</h1>
+                <p>Estás a punto de eliminar la orden <strong>@Model.NumeroOrden</strong> de @Model.ModeloCalzado.</p>
+                <div class="alert alert-warning" role="alert">
+                    También se eliminarán sus @Model.Procesos.Count asociación(es) de proceso. Los procesos de fabricación se conservarán.
+                </div>
+                <form asp-action="Delete" method="post" class="d-flex gap-2">
+                    <input asp-for="Id" type="hidden" />
+                    <button type="submit" class="btn btn-danger">Sí, eliminar orden</button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

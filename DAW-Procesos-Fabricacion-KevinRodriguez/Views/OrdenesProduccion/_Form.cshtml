@@ -1,0 +1,67 @@
+@model OrdenProduccionFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="NumeroOrden" class="form-label"></label>
+        <input asp-for="NumeroOrden" class="form-control" autofocus />
+        <span asp-validation-for="NumeroOrden" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ModeloCalzado" class="form-label"></label>
+        <input asp-for="ModeloCalzado" class="form-control" />
+        <span asp-validation-for="ModeloCalzado" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Cantidad" class="form-label"></label>
+        <input asp-for="Cantidad" class="form-control" min="1" />
+        <span asp-validation-for="Cantidad" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="FechaCreacion" class="form-label"></label>
+        <input asp-for="FechaCreacion" class="form-control" />
+        <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="FechaEntregaEstimada" class="form-label"></label>
+        <input asp-for="FechaEntregaEstimada" class="form-control" />
+        <span asp-validation-for="FechaEntregaEstimada" class="text-danger"></span>
+    </div>
+</div>
+
+<hr class="my-4" />
+<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+    <div>
+        <h2 class="h5 mb-1">Procesos de fabricación</h2>
+        <p class="text-muted mb-0">Selecciona al menos un proceso para esta orden.</p>
+    </div>
+    <a asp-controller="ProcesosFabricacion" asp-action="Create" class="btn btn-sm btn-outline-primary">Crear proceso</a>
+</div>
+<span asp-validation-for="ProcesosSeleccionados" class="text-danger d-block mb-2"></span>
+
+@if (Model.ProcesosDisponibles.Any())
+{
+    <div class="row g-3 mb-4">
+        @foreach (var proceso in Model.ProcesosDisponibles)
+        {
+            var estaSeleccionado = Model.ProcesosSeleccionados.Contains(proceso.Id);
+            <div class="col-md-6">
+                <label class="card h-100 border form-check-card @(estaSeleccionado ? "border-primary" : string.Empty)">
+                    <span class="card-body d-flex gap-3">
+                        <input class="form-check-input mt-1" type="checkbox" name="ProcesosSeleccionados" value="@proceso.Id" checked="@estaSeleccionado" />
+                        <span>
+                            <span class="fw-semibold d-block">@proceso.Nombre</span>
+                            <span class="small text-muted">@proceso.Descripcion</span>
+                        </span>
+                    </span>
+                </label>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Primero debes crear al menos un proceso de fabricación para registrar una orden.
+    </div>
+}
