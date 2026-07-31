@@ -26,18 +26,52 @@
     </div>
 </div>
 
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-2">
+            <div>
+                <h2 class="h5 mb-1">Avance de producción</h2>
+                <span class="badge @(Model.EstadoGeneral == EstadoOrdenProduccion.Completada ? "text-bg-success" : Model.EstadoGeneral == EstadoOrdenProduccion.EnProceso ? "text-bg-primary" : "text-bg-secondary")">@Model.EstadoGeneral</span>
+            </div>
+            <strong class="fs-4">@Model.PorcentajeAvance%</strong>
+        </div>
+        <div class="progress" role="progressbar" aria-label="Avance de la orden" aria-valuenow="@Model.PorcentajeAvance" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar @(Model.EstadoGeneral == EstadoOrdenProduccion.Completada ? "bg-success" : string.Empty)" style="width: @Model.PorcentajeAvance%">@Model.PorcentajeAvance%</div>
+        </div>
+    </div>
+</div>
+
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3"><h2 class="h5 mb-0">Procesos asociados</h2></div>
     <div class="table-responsive">
         <table class="table align-middle mb-0">
-            <thead class="table-light"><tr><th>Proceso</th><th>Descripción</th><th>Estado actual</th></tr></thead>
+            <thead class="table-light"><tr><th>Proceso</th><th>Descripción</th><th>Estado actual</th><th>Completado</th><th class="text-end">Actualizar</th></tr></thead>
             <tbody>
             @foreach (var relacion in Model.Procesos.OrderBy(relacion => relacion.ProcesoFabricacion.Nombre))
             {
                 <tr>
                     <td class="fw-semibold">@relacion.ProcesoFabricacion.Nombre</td>
                     <td>@relacion.ProcesoFabricacion.Descripcion</td>
-                    <td><span class="badge text-bg-secondary">@relacion.Estado</span></td>
+                    <td><span class="badge @(relacion.Estado == EstadoProceso.Completado ? "text-bg-success" : relacion.Estado == EstadoProceso.EnProceso ? "text-bg-primary" : "text-bg-secondary")">@relacion.Estado</span></td>
+                    <td>@(relacion.FechaCompletado?.ToString("dd/MM/yyyy") ?? "-")</td>
+                    <td class="text-end">
+                        <form asp-action="ActualizarEstadoProceso" method="post" class="d-flex justify-content-end gap-2">
+                            <input type="hidden" name="ordenId" value="@Model.Id" />
+                            <input type="hidden" name="procesoId" value="@relacion.ProcesoFabricacionId" />
+                            <select name="estado" class="form-select form-select-sm" style="max-width: 145px">
+                                @foreach (var estado in Enum.GetValues<EstadoProceso>())
+                                {
+                                    var texto = estado switch
+                                    {
+                                        EstadoProceso.EnProceso => "En proceso",
+                                        _ => estado.ToString()
+                                    };
+                                    <option value="@estado" selected="@(estado == relacion.Estado)">@texto</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Guardar</button>
+                        </form>
+                    </td>
                 </tr>
             }
             </tbody>

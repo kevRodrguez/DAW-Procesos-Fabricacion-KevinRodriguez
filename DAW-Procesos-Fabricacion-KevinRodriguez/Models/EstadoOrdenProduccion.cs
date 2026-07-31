@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DAW_Procesos_Fabricacion_KevinRodriguez.Models;
 
-public enum EstadoProceso
+public enum EstadoOrdenProduccion
 {
     [Display(Name = "Pendiente")]
     Pendiente,
@@ -10,6 +10,6 @@ public enum EstadoProceso
     [Display(Name = "En proceso")]
     EnProceso,
 
-    [Display(Name = "Completado")]
-    Completado
+    [Display(Name = "Completada")]
+    Completada
 }

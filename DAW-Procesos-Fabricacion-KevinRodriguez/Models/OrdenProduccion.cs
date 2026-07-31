@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAW_Procesos_Fabricacion_KevinRodriguez.Models;
 
@@ -29,6 +30,20 @@ public class OrdenProduccion : IValidatableObject
     public DateOnly FechaEntregaEstimada { get; set; }
 
     public ICollection<OrdenProceso> Procesos { get; set; } = new List<OrdenProceso>();
+
+    [Display(Name = "Avance")]
+    [NotMapped]
+    public int PorcentajeAvance => Procesos.Count == 0
+        ? 0
+        : (int)Math.Round(Procesos.Count(proceso => proceso.Estado == EstadoProceso.Completado) * 100d / Procesos.Count);
+
+    [Display(Name = "Estado")]
+    [NotMapped]
+    public EstadoOrdenProduccion EstadoGeneral => Procesos.Count == 0 || Procesos.All(proceso => proceso.Estado == EstadoProceso.Pendiente)
+        ? EstadoOrdenProduccion.Pendiente
+        : Procesos.All(proceso => proceso.Estado == EstadoProceso.Completado)
+            ? EstadoOrdenProduccion.Completada
+            : EstadoOrdenProduccion.EnProceso;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

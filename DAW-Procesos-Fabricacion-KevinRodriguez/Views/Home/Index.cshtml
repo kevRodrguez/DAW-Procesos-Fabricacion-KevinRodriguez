@@ -1,8 +1,63 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Panel de producción";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Panel de producción</h1>
+        <p class="text-muted mb-0">Resumen operativo de Calzado Innovador S.A.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="OrdenesProduccion" asp-action="Create" class="btn btn-primary">Nueva orden</a>
+        <a asp-controller="ProcesosFabricacion" asp-action="Create" class="btn btn-outline-primary">Nuevo proceso</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><span class="text-muted small">Total de órdenes</span><p class="display-6 fw-semibold mb-0">@Model.TotalOrdenes</p></div></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><span class="text-muted small">Pendientes</span><p class="display-6 fw-semibold text-secondary mb-0">@Model.OrdenesPendientes</p></div></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><span class="text-muted small">En proceso</span><p class="display-6 fw-semibold text-primary mb-0">@Model.OrdenesEnProceso</p></div></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><span class="text-muted small">Completadas</span><p class="display-6 fw-semibold text-success mb-0">@Model.OrdenesCompletadas</p></div></div></div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h2 class="h5 mb-0">Órdenes recientes</h2>
+        <a asp-controller="OrdenesProduccion" asp-action="Index" class="btn btn-sm btn-outline-secondary">Ver todas</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light"><tr><th>Orden</th><th>Modelo</th><th>Estado</th><th class="w-25">Avance</th><th></th></tr></thead>
+            <tbody>
+            @if (Model.OrdenesRecientes.Any())
+            {
+                @foreach (var orden in Model.OrdenesRecientes)
+                {
+                    var claseEstado = orden.EstadoGeneral switch
+                    {
+                        EstadoOrdenProduccion.Completada => "text-bg-success",
+                        EstadoOrdenProduccion.EnProceso => "text-bg-primary",
+                        _ => "text-bg-secondary"
+                    };
+                    <tr>
+                        <td class="fw-semibold">@orden.NumeroOrden</td>
+                        <td>@orden.ModeloCalzado</td>
+                        <td><span class="badge @claseEstado">@orden.EstadoGeneral</span></td>
+                        <td>
+                            <div class="progress" role="progressbar" aria-label="Avance de @orden.NumeroOrden" aria-valuenow="@orden.PorcentajeAvance" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar" style="width: @orden.PorcentajeAvance%">@orden.PorcentajeAvance%</div>
+                            </div>
+                        </td>
+                        <td class="text-end"><a asp-controller="OrdenesProduccion" asp-action="Details" asp-route-id="@orden.Id" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="5" class="text-center py-5 text-muted">Aún no hay órdenes para mostrar.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </div>

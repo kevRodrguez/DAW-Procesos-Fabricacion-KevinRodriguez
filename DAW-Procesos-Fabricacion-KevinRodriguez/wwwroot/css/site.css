@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(13, 110, 253, .35);
 }
 
 html {
@@ -18,14 +18,50 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.navbar-brand {
+  letter-spacing: .01em;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.navbar .nav-link {
+  opacity: .85;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  opacity: 1;
+}
+
+.card {
+  border-radius: .75rem;
+}
+
+.table > :not(caption) > * > * {
+  padding: .9rem .75rem;
+}
+
+.form-check-card {
+  cursor: pointer;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.form-check-card:hover {
+  border-color: var(--bs-primary) !important;
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+.form-check-card:has(.form-check-input:checked) {
+  border-color: var(--bs-primary) !important;
+  background-color: rgba(13, 110, 253, .04);
+}
+
+.progress {
+  height: .75rem;
+}
+
+.progress-bar {
+  min-width: 2rem;
 }

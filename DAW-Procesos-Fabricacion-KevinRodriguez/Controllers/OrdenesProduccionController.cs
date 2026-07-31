@@ -224,6 +224,31 @@ public class OrdenesProduccionController(AppDbContext context) : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ActualizarEstadoProceso(int ordenId, int procesoId, EstadoProceso estado)
+    {
+        var relacion = await context.OrdenesProcesos
+            .SingleOrDefaultAsync(relacion =>
+                relacion.OrdenProduccionId == ordenId &&
+                relacion.ProcesoFabricacionId == procesoId);
+
+        if (relacion is null)
+        {
+            return NotFound();
+        }
+
+        relacion.Estado = estado;
+        relacion.FechaCompletado = estado == EstadoProceso.Completado
+            ? DateOnly.FromDateTime(DateTime.Today)
+            : null;
+
+        await context.SaveChangesAsync();
+        TempData["Success"] = "El estado del proceso fue actualizado correctamente.";
+
+        return RedirectToAction(nameof(Details), new { id = ordenId });
+    }
+
     private async Task<HashSet<int>?> ValidarProcesosSeleccionadosAsync(OrdenProduccionFormViewModel model)
     {
         model.ProcesosSeleccionados ??= [];
