@@ -13,6 +13,7 @@ public class ProcesoFabricacion
 
     [Required(ErrorMessage = "La descripción del proceso es obligatoria.")]
     [StringLength(500, ErrorMessage = "La descripción no puede superar los 500 caracteres.")]
+    [Display(Name = "Descripción")]
     public string Descripcion { get; set; } = string.Empty;
 
     public ICollection<OrdenProceso> Ordenes { get; set; } = new List<OrdenProceso>();
